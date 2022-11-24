@@ -41,9 +41,10 @@ SYSTEM =	UNIX
 SUBSYSTEM =	SOLARIS
 
 # Locations
-DIR =		/home/dick
-BINDIR =	$(DIR)/bin.`$(DIR)/bin/arch`
-MAN1DIR =	$(DIR)/man/man1
+
+DIR =		/home/zm/git
+BINDIR =	$(DIR)/bin
+MAN1DIR =	$(DIR)/sim
 
 # Commands
 COPY =		cp -p
@@ -56,27 +57,7 @@ ZIP =		zip -o
 NULLFILE =	/dev/null
 
 ################################################################
-# For MSDOS + MinGW
 
-SYSTEM =	MSDOS
-SUBSYSTEM =	MinGW
-
-# Locations
-DIR =		C:/BIN
-BINDIR =	C:/BIN
-MAN1DIR =	C:/BIN
-
-# File names
-NULLFILE =	nul
-
-# Commands (cp required, since xcopy cannot handle forward slashes)
-COPY =		cp -p
-EXE =		.exe
-LEX =		flex
-LN =		ln
-ZIP =		zip -o
-
-################################################################
 # General, C compilation:
 CC =		gcc -D$(SYSTEM) -D$(SUBSYSTEM)
 LINT =		lint -ansi -D$(SYSTEM) -D$(SUBSYSTEM)
@@ -203,7 +184,7 @@ test:		sim.res stream.res percentages.res version.res
 
 BINARIES =	sim_c$(EXE) sim_c++$(EXE) sim_java$(EXE) sim_pasc$(EXE) \
 		sim_m2$(EXE) sim_lisp$(EXE) sim_mira$(EXE) sim_text$(EXE) \
-		sim_8086$(EXE)
+		sim_8086$(EXE) sim_prol$(EXE)
 
 binaries:	$(BINARIES)#		# for *N?X
 exes:		binaries#		# for MSDOS
@@ -298,6 +279,9 @@ sim_m2$(EXE):	$(SIM_SRC) $(PROP_SRC) m2lang.l $(LEX_HDR)
 
 sim_lisp$(EXE):	$(SIM_SRC) $(PROP_SRC) lisplang.l $(LEX_HDR)
 		make GEN_LANG=lisp sim_gen$(EXE)
+		
+sim_prol$(EXE):	$(SIM_SRC) $(PROP_SRC) prollang.l $(LEX_HDR)
+		make GEN_LANG=prol sim_gen$(EXE)		
 
 sim_mira$(EXE):	$(SIM_SRC) $(PROP_SRC) miralang.l $(LEX_HDR)
 		make GEN_LANG=mira sim_gen$(EXE)
@@ -388,6 +372,7 @@ install:	$(MAN1DIR)/sim.1 \
 		$(BINDIR)/sim_pasc$(EXE) \
 		$(BINDIR)/sim_m2$(EXE) \
 		$(BINDIR)/sim_lisp$(EXE) \
+		$(BINDIR)/sim_prol$(EXE) \
 		$(BINDIR)/sim_mira$(EXE) \
 		$(BINDIR)/sim_8086$(EXE)
 
@@ -414,6 +399,9 @@ $(BINDIR)/sim_m2$(EXE):	sim_m2$(EXE)
 
 $(BINDIR)/sim_lisp$(EXE):	sim_lisp$(EXE)
 		$(COPY) sim_lisp$(EXE) $@
+		
+$(BINDIR)/sim_prol$(EXE):	sim_prol$(EXE)
+		$(COPY) sim_prol$(EXE) $@		
 
 $(BINDIR)/sim_mira$(EXE):	sim_mira$(EXE)
 		$(COPY) sim_mira$(EXE) $@
